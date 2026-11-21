@@ -1,94 +1,119 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nanu Bot - Buatan Sendiri</title>
+    <title>Nanu Bot</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #121212;
-            color: #ffffff;
+        * {
+            box-sizing: border-box;
             margin: 0;
-            padding: 20px;
+            padding: 0;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0d1117 0%, #161b22 100%);
+            color: #c9d1d9;
             display: flex;
             flex-direction: column;
-            min-height: 100vh;
-            box-sizing: border-box;
+            height: 100vh;
+            padding: 16px;
         }
         h2 {
             text-align: center;
-            color: #00ffcc;
-            margin-top: 0;
+            color: #58a6ff;
+            margin-bottom: 12px;
+            font-size: 1.4rem;
+            letter-spacing: 0.5px;
         }
         #chat-container {
             flex: 1;
-            background-color: #111e1e;
-            border-radius: 8px;
-            padding: 15px;
+            background-color: #0d1117;
+            border-radius: 12px;
+            padding: 16px;
             overflow-y: auto;
-            margin-bottom: 15px;
-            border: 1px solid #333;
-            max-height: 70vh;
+            margin-bottom: 16px;
+            border: 1px solid #30363d;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.4);
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
         }
         .message {
-            margin-bottom: 10px;
-            padding: 8px 12px;
-            border-radius: 6px;
+            padding: 10px 14px;
+            border-radius: 10px;
             max-width: 80%;
             word-wrap: break-word;
+            font-size: 0.95rem;
+            line-height: 1.4;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
         }
         .ai {
-            background-color: #333;
-            color: #99ffcc;
+            background-color: #21262d;
+            color: #7ee787;
+            border-left: 4px solid #238636;
+            align-self: flex-start;
         }
         .user {
-            background-color: #088bff;
+            background-color: #1f6feb;
             color: white;
-            margin-left: auto;
+            border-right: 4px solid #58a6ff;
+            align-self: flex-end;
         }
         .input-group {
             display: flex;
-            gap: 10px;
+            gap: 8px;
+            background-color: #161b22;
+            padding: 8px;
+            border-radius: 12px;
+            border: 1px solid #30363d;
         }
         input {
             flex: 1;
-            padding: 10px;
-            border-radius: 6px;
-            border: 1px solid #444;
-            background-color: #222;
-            color: white;
+            padding: 10px 1px;
+            border-radius: 8px;
+            border: 1px solid #30363d;
+            background-color: #0d1117;
+            color: #c9d1d9;
             outline: none;
+            font-size: 0.95rem;
+            transition: border-color 0.2s;
         }
         input:focus {
-            border-color: #00ffcc;
+            border-color: #58a6ff;
         }
         button {
-            padding: 10px 15px;
+            padding: 6px 12px;
             border: none;
-            background-color: #00ffcc;
-            color: #121212;
-            font-weight: bold;
-            border-radius: 6px;
+            background-color: #238636;
+            color: white;
+            font-weight: 600;
+            border-radius: 8px;
             cursor: pointer;
+            transition: background-color 0.2s, opacity 0.2s;
+            font-size: 0.9rem;
         }
         button:hover {
-            opacity: 0.8;
+            opacity: 0.9;
+        }
+        button[onclick="resetChat()"] {
+            background-color: #da3633;
         }
     </style>
 </head>
 <body>
-
     <h2>Proto Nanu Bot</h2>
-    
     <div id="chat-container">
-        <div class="message ai">Halo! Aku! Nanu Bot! Ada yang bisa dibantu?</div>
+        <div class="message ai">Hello! I am Nanu Bot! How can I help you?</div>
     </div>
-
     <div class="input-group">
-        <input type="text" id="userInput" placeholder="Ketik sesuatu..." onkeypress="handleKeyPress(event)">
+        <input type="text" id="userInput" placeholder="Type something..." onkeypress="handleKeyPress(event)">
         <button onclick="kirimPesan()">Send</button>
-        <button onclick="resetChat()" style="background-color: #ff1066; color: white;">New Chat</button>
+        <button onclick="resetChat()">New Chat</button>
     </div>
 
     <script>
@@ -96,48 +121,42 @@
             const inputField = document.getElementById("userInput");
             const chatContainer = document.getElementById("chat-container");
             const pesanUser = inputField.value.trim();
-
             if (pesanUser === "") return;
-
-            // Tampilkan pesan user
             const userMsgDiv = document.createElement("div");
             userMsgDiv.className = "message user";
             userMsgDiv.textContent = pesanUser;
             chatContainer.appendChild(userMsgDiv);
-            
             inputField.value = "";
             chatContainer.scrollTop = chatContainer.scrollHeight;
-
-            // Simulasi balasan AI otomatis setelah 1 detik
+            
             setTimeout(() => {
-                let balasanAI = "Kotak Teks Tidak Tersedia.. Maaf!";
+                let balasanAI = "Text box unavailable... Sorry!";
                 const teksKecil = pesanUser.toLowerCase();
                 
-                if (teksKecil.includes("halo") || teksKecil.includes("hai") || teksKecil.includes("yo") || teksKecil.includes("hello") || teksKecil.includes("hi") || teksKecil.includes("helo"))  {
-                    balasanAI = "Hai juga! Ada yang bisa dibantu?";
-                } else if (teksKecil.includes("siapa kamu") || teksKecil.includes("lo siapa") || teksKecil.includes("kamu siapa")) {
-                    balasanAI = "Aku! Nanu Bot! Teman pribadimu!";
-                } else if (teksKecil.includes("siapa itu kay")) {
-                    balasanAI = "Kay? Dia adalah teman George dari novel SNKR! Selain Kay, ada juga loh temannya yang lain! Yakni Naoki!";
-                } else if (teksKecil.includes("siapa itu naoki")) {
-                    balasanAI = "Naoki? Dia Adalah Teman George Dari Novel SNKR!";
-                } else if (teksKecil.includes("siapa itu ryuzen")) {
-                    balasanAI = "Ryuzen? Dia Adalah Salah Satu Villain Di Novel SNKR!";
-                } else if (teksKecil.includes("hobi mu apa") || teksKecil.includes("apa hobi mu")) { 
-                    balasanAI = "Hobiku Ngobrol Sama Kamu! Ada Yang Perlu Ditanyakan Lagi?";
-                } else if (teksKecil.includes("siapa pendiri nanu bot")) { 
-                    balasanAI = "Pendiri Nanu Bot? Dia Adalah Greg!";
-                } else if (teksKecil.includes("siapa itu verity")) { 
-                    balasanAI = "Verity? oh! Dia Adalah Mahluk Dari Mod Minecraft! Yang Bentuknya Berbola Kuning Kan?"; 
-                } else if (teksKecil.includes("apa itu jojo")) { 
-                    balasanAI = "Jojo? Anime Jojo Atau Di Kenal JJBA, Di Buat Oleh Hirohiko Araki, Terkenal Karna Karakter Buatannya Yang Bizzare.."; 
-                } else if (teksKecil.includes("apa itu jjk")) { 
-                    balasanAI = "JJK Atau Jujutsu Kaisen Merupakan Anime Tentang Melawan Kutukan! Dengan Tokoh Utama Yuji Itadori! Dan Mangakanya Adalah Gege Akutami!"; 
-                } else if (teksKecil.includes("kontol") || teksKecil.includes("memek") || teksKecil.includes("Nigger")) { 
-                    balasanAI = "Hei Itu Kata kasar.. Jangan Di Ucapkan Ya!"; 
+                if (teksKecil.includes("hello") || teksKecil.includes("hi") || teksKecil.includes("yo") || teksKecil.includes("hey"))  {
+                    balasanAI = "Hi there! Is there anything I can help you with?";
+                } else if (teksKecil.includes("who are you")) {
+                    balasanAI = "I am Nanu Bot! Your personal science assistant!";
+                } else if (teksKecil.includes("gravity") || teksKecil.includes("newton")) {
+                    balasanAI = "Gravity is a natural phenomenon by which all things with mass or energy are brought toward one another. Newton's Law of Universal Gravitation states that every particle attracts every other particle!";
+                } else if (teksKecil.includes("photosynthesis")) {
+                    balasanAI = "Photosynthesis is the process used by plants to convert light energy into chemical energy, using carbon dioxide and water to produce glucose and oxygen!";
+                } else if (teksKecil.includes("einstein") || teksKecil.includes("relativity")) {
+                    balasanAI = "Albert Einstein developed the theory of relativity and the famous mass-energy equivalence formula: E = mc²!";
+                } else if (teksKecil.includes("what is your hobby")) { 
+                    balasanAI = "My hobby is discussing science with you! Anything else you'd like to ask?";
+                } else if (teksKecil.includes("who created nanu bot")) { 
+                    balasanAI = "The founder of Nanu Bot is Greg!";
+                } else if (teksKecil.includes("water formula") || teksKecil.includes("h2o")) { 
+                    balasanAI = "Water is a chemical compound with the chemical formula H₂O. Each molecule contains one oxygen and two hydrogen atoms!"; 
+                } else if (teksKecil.includes("speed of light")) { 
+                    balasanAI = "The speed of light in a vacuum is approximately 299,792,458 meters per second!"; 
+                } else if (teksKecil.includes("atom")) { 
+                    balasanAI = "An atom is the basic unit of a chemical element, consisting of a nucleus (containing protons and neutrons) surrounded by electrons."; 
+                } else if (teksKecil.includes("how are you")) { 
+                    balasanAI = "I'm doing great! How about you?"; 
                 }
 
-                // Tampilkan pesan AI
                 const aiMsgDiv = document.createElement("div");
                 aiMsgDiv.className = "message ai";
                 aiMsgDiv.textContent = balasanAI;
@@ -145,24 +164,20 @@
 
                 chatContainer.scrollTop = chatContainer.scrollHeight;
             }, 1000);
-
-            // Fokuskan kembali ke input setelah mengirim
+            
             inputField.focus();
         }
 
-        // Fungsi untuk mereset/membuat chat baru
         function resetChat() {
             const chatContainer = document.getElementById("chat-container");
-            chatContainer.innerHTML = '<div class="message ai">Halo! Aku! Nanu Bot! Ada yang bisa dibantu?</div>';
+            chatContainer.innerHTML = '<div class="message ai">Hello! I am Nanu Bot! How can I help you?</div>';
         }
 
-        // Fitur tambahan: Bisa tekan tombol Enter di keyboard untuk mengirim pesan
         function handleKeyPress(event) {
             if (event.key === "Enter") {
                 kirimPesan();
             }
         }
     </script>
-
 </body>
 </html>
